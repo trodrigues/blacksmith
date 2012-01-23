@@ -1,9 +1,10 @@
 {
   "name": "blacksmith",
   "description": "The node documentation project",
-  "version": "0.0.7",
+  "version": "0.1.0-dev",
   "scripts": {
-    "start": "bin/server"
+    "start": "bin/server",
+    "test": "vows --spec ./test/test.js"
   },
   "bin": {
     "blacksmith": "bin/blacksmith"
