@@ -1,7 +1,8 @@
 var vows = require('vows'),
     assert = require('assert'),
     forge = require('../lib/forge'),
-    plugins = forge.plugins;
+    plugins = forge.plugins,
+    util = require('util');
 
 vows.describe('blacksmith.forge').addBatch({
   'A basic generator with no plugins': {
@@ -60,7 +61,7 @@ vows.describe('blacksmith.forge').addBatch({
     }
   },
 
-  'A more interesting generator with multiple plugins': {
+  'A basic generator with a plugin that does nothing': {
     topic: function () {
       var topic = this;
 
@@ -68,8 +69,9 @@ vows.describe('blacksmith.forge').addBatch({
         logger: console.log
       });
 
-      generator.use(plugins.markdownReader, {
-        'property': 'name'
+      generator.use({
+        attach: function () {},
+        init: function (d) { d(); }
       });
 
       generator.init(function (err) {
@@ -96,13 +98,26 @@ vows.describe('blacksmith.forge').addBatch({
           '  </li>',
           '</ul>'
         ].join('\n'),
+        markdown: '# HELLO',
         contacts: [
-          { name: '#hij1nx', title : 'code slayer' },
-          { name: '#tmpvar', title : 'code pimp' }
+          { name: 'hij1nx', title : 'code slayer' },
+          { name: 'tmpvar', title : 'code pimp' }
         ]
       });
 
-      assert.equal(typeof(html), 'string');
+      assert.equal(html, [
+        '<ul class="contacts">',
+        '  <li class="contact">',
+        '    <span class="name">hij1nx</span>',
+        '    <p class="title">code slayer</p>',
+        '  </li>',
+        '</ul><ul class="contacts">',
+        '  <li class="contact">',
+        '    <span class="name">tmpvar</span>',
+        '    <p class="title">code pimp</p>',
+        '  </li>',
+        '</ul>'
+      ].join('\n'));
     }
   },
 }).export(module);
