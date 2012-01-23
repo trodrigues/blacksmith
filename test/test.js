@@ -1,6 +1,7 @@
 var vows = require('vows'),
     assert = require('assert'),
-    forge = require('../lib/forge');
+    forge = require('../lib/forge'),
+    plugins = forge.plugins;
 
 vows.describe('blacksmith.forge').addBatch({
   'A basic generator with no plugins': {
@@ -57,5 +58,51 @@ vows.describe('blacksmith.forge').addBatch({
         '</ul>'
       ].join('\n'));
     }
-  }
+  },
+
+  'A more interesting generator with multiple plugins': {
+    topic: function () {
+      var topic = this;
+
+      var generator = forge({
+        logger: console.log
+      });
+
+      generator.use(plugins.markdownReader, {
+        'property': 'name'
+      });
+
+      generator.init(function (err) {
+        topic.callback(err, generator);
+      });
+
+    },
+    'doesn\'t throw an error': function (err, generator) {
+      assert.doesNotThrow(function () {
+        if (err) {
+          throw err;
+        }
+      });
+    },
+    'can do a basic weld job': function (err, generator) {
+
+      // Copypasted from earlier, doesn't test the plugins rigorously
+      var html = generator.generate({
+        template: [
+          '<ul class="contacts">',
+          '  <li class="contact">',
+          '    <span class="name">My Name</span>',
+          '    <p class="title">Leet Developer</p>',
+          '  </li>',
+          '</ul>'
+        ].join('\n'),
+        contacts: [
+          { name: '#hij1nx', title : 'code slayer' },
+          { name: '#tmpvar', title : 'code pimp' }
+        ]
+      });
+
+      assert.equal(typeof(html), 'string');
+    }
+  },
 }).export(module);
