@@ -9,9 +9,7 @@ vows.describe('blacksmith.forge').addBatch({
     topic: function () {
       var topic = this;
 
-      var generator = forge({
-        logger: console.log
-      });
+      var generator = forge();
 
       generator.init(function (err) {
         topic.callback(err, generator);
@@ -65,13 +63,12 @@ vows.describe('blacksmith.forge').addBatch({
     topic: function () {
       var topic = this;
 
-      var generator = forge({
-        logger: console.log
-      });
+      var generator = forge();
 
       generator.use({
-        attach: function () {},
-        init: function (d) { d(); }
+        attach: function () {
+          var self = this;
+        }
       });
 
       generator.init(function (err) {
