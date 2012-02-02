@@ -85,7 +85,6 @@ vows.describe('blacksmith.forge').addBatch({
     },
     'can do a basic weld job': function (err, generator) {
 
-      // Copypasted from earlier, doesn't test the plugins rigorously
       var html = generator.generate({
         template: [
           '<ul class="contacts">',
@@ -117,4 +116,44 @@ vows.describe('blacksmith.forge').addBatch({
       ].join('\n'));
     }
   },
+  'A generator with the markdownReader plugin': {
+    topic: function () {
+      var topic = this;
+
+      var generator = forge();
+
+      generator.use(plugins.markdownReader, {
+        "property": "markdown"
+      });
+
+      generator.init(function (err) {
+        topic.callback(err, generator);
+      });
+
+    },
+    'doesn\'t throw an error': function (err, generator) {
+      assert.doesNotThrow(function () {
+        if (err) {
+          throw err;
+        }
+      });
+    },
+    'properly parses the markdown': function (err, generator) {
+
+      var html = generator.generate({
+        template: [
+          '<div class="markdown">',
+          '  foo',
+          '</div>'
+        ].join('\n'),
+        markdown: '# HELLO\n'
+      });
+
+      assert.equal(html, [
+        '<div class="markdown">',
+        '  <h1>HELLO</h1>',
+        '</div>'
+      ].join('\n'));
+    }
+  }
 }).export(module);
