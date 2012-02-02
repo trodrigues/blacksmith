@@ -11,6 +11,7 @@
   },
   "author": "Nodejitsu <info@nodejitsu.com>",
   "dependencies": {
+    "broadway": "git+https://github.com/flatiron/broadway.git",
     "blacksmith-sites": "0.0.1",
     "async": "0.1.x",
     "marked": "git+https://github.com/chjj/marked.git#gfm",
