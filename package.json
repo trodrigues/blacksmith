@@ -8,6 +8,7 @@
   "bin": {
     "blacksmith": "bin/blacksmith"
   },
+  "main" : "./lib/blacksmith",
   "author": "Nodejitsu <info@nodejitsu.com>",
   "dependencies": {
     "blacksmith-sites": "0.0.x",
